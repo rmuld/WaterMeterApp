@@ -1,6 +1,6 @@
 FROM node:alpine
-RUN npm install --global nodemon
 WORKDIR /app
+RUN npm install --global nodemon
 COPY package.json ./
 COPY package-lock.json ./
 COPY ./ ./

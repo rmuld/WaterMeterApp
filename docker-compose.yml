@@ -20,24 +20,11 @@ services:
     environment:
       # <<: *common-variables
       MYSQL_DATABASE: watermeter
-      MYSQL_USER: MYSQL_USER
-      MYSQL_PASSWORD: MYSQL_PASSWORD
-      MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
-      MYSQL_HOST: localhost
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
-#nginx setup
-  nginx:
-    depends_on:
-      - api
-      - client
-    restart: always
-    build:
-      dockerfile: nginx.Dockerfile
-      context: ./nginx
-    ports:
-      - "3050:80"
-
-#services setup
+#server setup
   api:
     build:
       dockerfile: server.Dockerfile
@@ -47,12 +34,15 @@ services:
     volumes:
       - /app/node_modules
       - ./server:/app
+      - .env:/app/.env
     environment:
       # <<: *common-variables
       # MYSQL_DATABASE: watermeter
       # MYSQL_USER: MYSQL_USER
       # MYSQL_PASSWORD: MYSQL_PASSWORD
       MYSQL_HOST_IP: mysql_db
+    ports:
+      - 3050:3001
 
 #client setup
   client:
@@ -65,6 +55,8 @@ services:
     volumes:
       - /app/node_modules
       - ./client:/app
+    ports:
+      - "80:3000"
 
 #adminer setup
   adminer:

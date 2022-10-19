@@ -25,7 +25,7 @@ Have Node.js and Docker installed
 # Docker
 
 ## Create server image
-`docker build -f Dockerfile -t server .`
+`docker build -f server.Dockerfile -t server .`
 
 ## execute the server image
 `docker run -it -p 4002:3001 server`
