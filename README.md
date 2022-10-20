@@ -30,10 +30,6 @@ Have Node.js and Docker installed
 ## execute the server image
 `docker run -it -p 4002:3001 server`
 
-## NGINX
-Create default.conf file
-Create Dockerfile
-
 ## Create docker-compose.yml 
 ## Create root and setup.sql 
 When the mysql_db instance has been created, this script will be executed, and a table books_reviews will automatically create the defined fields.
