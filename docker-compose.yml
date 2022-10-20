@@ -1,11 +1,5 @@
 version: '3.8'
 
-#kas seda on vaja?
-# x-common-variables: &common-variables
-#   MYSQL_DATABASE: watermeter
-#   MYSQL_USER: MYSQL_USER
-#   MYSQL_PASSWORD: MYSQL_PASSWORD
-
 services:
 #mysql setup
   mysql_db:
@@ -19,7 +13,7 @@ services:
       - "9906:3306"
     environment:
       # <<: *common-variables
-      MYSQL_DATABASE: watermeter
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
       MYSQL_USER: "${MYSQL_USER}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -36,11 +30,10 @@ services:
       - ./server:/app
       - .env:/app/.env
     environment:
-      # <<: *common-variables
-      # MYSQL_DATABASE: watermeter
-      # MYSQL_USER: MYSQL_USER
-      # MYSQL_PASSWORD: MYSQL_PASSWORD
-      MYSQL_HOST_IP: mysql_db
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_HOST_IP: "${MYSQL_HOST_IP}"
     ports:
       - 3050:3001
 
