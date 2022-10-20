@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { IUser } from '../interfaces/usersInterfaces';
 
 const saltRounds = process.env.SALTROUNDS || 10;
-const jwtSecret = process.env.JWT_SECRET || "";
+const jwtSecret = process.env.JWT_SECRET || "jwt_secret"; //TODO
 
 
 const hash = async (password:string): Promise<string> => {

@@ -44,6 +44,7 @@ const getAllUsers = () => {
 const createUser = async (newUser: INewUser): Promise<number> => {
     const id = users.length + 1;
     const hashedPassword = await hashService.hash(newUser.password)
+    console.log(hashedPassword)
     
     users.push({id, ...newUser, password: hashedPassword});
     return id;
