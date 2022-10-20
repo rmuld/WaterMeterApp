@@ -8,6 +8,15 @@ interface INewUser {
     role: string;
 }
 
+interface IUserWithoutRole {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    personalNumber: number;
+    phone: string;
+}
+
 interface IUser extends INewUser {
     id: number;
 }
@@ -22,4 +31,4 @@ interface IUserWithoutPassword {
     role: string;
 }
 
-export { INewUser, IUser, IUserWithoutPassword };
+export { INewUser, IUser, IUserWithoutPassword, IUserWithoutRole };

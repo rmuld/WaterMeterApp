@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import { IUser } from "../interfaces/usersInterfaces";
-import { users } from '../mockData/mockData';
+import { INewUser, IUser } from "../interfaces/usersInterfaces";
 import userServices from '../services/userServices';
 
 
@@ -35,7 +34,7 @@ const getUserById = (req: Request, res: Response) => {
 
 const updateUser = (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
-    const { firstName, lastName, email, password, personalNumber, phone } = req.body;
+    const { firstName, lastName, email, password, personalNumber, phone, role } = req.body;
     const user: IUser | undefined = userServices.getUserById(id);
     if (!user) {
         return res.status(404).json({
@@ -43,29 +42,35 @@ const updateUser = (req: Request, res: Response) => {
             message: `User not found`,
         });
     }
-    if (!firstName && !lastName && !email && !password && !personalNumber && !phone) {
+    if (!firstName && !lastName && !email && !password && !personalNumber && !phone && !role) {
         return res.status(400).json({
             success: false,
             message: `Nothing to change`,
         });
     }
 
-    if (firstName) user.firstName = firstName;
-    if (lastName) user.lastName = lastName;
-    if (email) user.email = email;
-    if (password) user.password = password;
-    if (personalNumber) user.personalNumber = personalNumber;
-    if (phone) user.phone = phone;
+    const userToUpdate: IUser = {
+        id,
+        firstName,
+        lastName,
+        email,
+        password,
+        personalNumber,
+        phone,
+        role
+    }
+
+    userServices.updateUser(userToUpdate);
 
     return res.status(200).json({
         success: true,
-        message: `User updated`,
+        message: `User ${firstName} ${lastName} updated`,
     });
 };
 
 const createNewUser = async (req: Request, res: Response) => {
-    const { firstName, lastName, email, password, personalNumber, phone } = req.body;
-    const newUser = {
+    const { firstName, lastName, personalNumber, email, password, phone } = req.body;
+    const newUser: INewUser = {
         firstName,
         lastName,
         email,
@@ -84,14 +89,14 @@ const createNewUser = async (req: Request, res: Response) => {
 
 const deleteUserById = (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
-    const index = users.findIndex(element => element.id === id);
-    if (index === -1) {
+    const result = userServices.deleteUser(id);
+    if (!result) {
         return res.status(404).json({
             success: false,
             message: `User not found`,
         });
     }
-    users.splice(index, 1);
+    
     return res.status(200).json({
         success: true,
         message: `User deleted`,
