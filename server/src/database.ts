@@ -1,4 +1,4 @@
-import mysql from 'mysql2'
+import mysql from 'mysql2';
 
 // Create the connection pool. The pool-specific settings are the defaults
 const pool = mysql.createPool({
@@ -8,7 +8,8 @@ const pool = mysql.createPool({
   database: process.env.DATABASE,
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
+  queueLimit: 0,
+  multipleStatements: true,
 }).promise();
 
 const querySql = (query: any, onData: any, onError:any) => {
@@ -26,4 +27,4 @@ catch (error) {
     if(onError !== undefined) onError(error)
 }
 }
-export default querySql;
+export default pool;

@@ -1,16 +1,26 @@
 import bcrypt from 'bcrypt';
 
-const saltRounds = process.env.SALTROUNDS || 10;
+let saltRounds: number;
 
-const hashService = {
-    hash: async (password: string): Promise<string> => {
-        const hash = await bcrypt.hash(password, saltRounds);
-        return hash;
-      },
-    compare: (password: string, hash: string): Promise<boolean> => {
-        const match = bcrypt.compare(password, hash);
-        return match;
+const hash = async (password: string): Promise<string> => {
+    if (process.env.SALT_ROUNDS) {
+        saltRounds = parseInt(process.env.SALT_ROUNDS)
+    } else {
+    throw new Error("saltRounds environment variable is not set")
     }
+
+    const hash = await bcrypt.hash(password, saltRounds);
+    return hash;
+}
+    
+const compare = (password: string, hash: string): Promise<boolean> => {
+    const match = bcrypt.compare(password, hash);
+    return match;
+}
+    
+const hashService = {
+    hash,
+    compare
 };
 
 export default hashService;

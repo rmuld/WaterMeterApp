@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { IUser } from '../interfaces/usersInterfaces';
 
 const saltRounds = process.env.SALTROUNDS || 10;
-const jwtSecret = process.env.JWT_SECRET || "jwt_secret"; //TODO
+const jwtSecret = process.env.JWT_SECRET || "youwillneverknow"; //TODO
 
 
 const hash = async (password:string): Promise<string> => {
@@ -14,7 +14,7 @@ const hash = async (password:string): Promise<string> => {
 }
 const compare = async (password:string, hash: string): Promise<boolean> => {
     const match = await bcrypt.compare(password, hash);
-    console.log("match: ", match)
+    
     return match
 }
 const sign = async (user:IUser): Promise<string> => {
@@ -28,8 +28,7 @@ const sign = async (user:IUser): Promise<string> => {
     return token
 }
 const verify = async (token:string) => {
-    const decoded = await jwt.verify(token, jwtSecret);
-    console.log("decoded: ", decoded)
+    const decoded = await jwt.verify(token, jwtSecret);    
     return decoded
 }
 const authServices = {

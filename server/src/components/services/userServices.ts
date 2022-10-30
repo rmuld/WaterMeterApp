@@ -1,3 +1,4 @@
+import pool from '../../database';
 import { INewUser, IUser, IUserWithoutPassword } from "../interfaces/usersInterfaces";
 import { users } from '../mockData/mockData';
 import hashService from "./hashService";
@@ -33,11 +34,13 @@ const unknownUser = (): IUser => {
         };
 };
 
-const getAllUsers = () => {
+const getAllUsers = async () => {
     const usersWithoutPassword = users.map(user => {
         const userWithoutPassword = userServices.getUserWithoutPassword(user);
         return userWithoutPassword;
     });
+    const u = await pool.query('select * from users limit 10')
+    console.log('users: ', u)
     return usersWithoutPassword;
 }
     

@@ -8,11 +8,11 @@ services:
     cap_add:
       - SYS_NICE
     volumes:
-      - "./setup.sql:/docker-entrypoint-initdb.d/setup.sql"
+      #- "./setup.sql:/docker-entrypoint-initdb.d/setup.sql"
+      - ./database/db_container_volume:/var/lib/mysql
     ports:
       - "9906:3306"
     environment:
-      # <<: *common-variables
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
       MYSQL_USER: "${MYSQL_USER}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
@@ -35,7 +35,7 @@ services:
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       MYSQL_HOST_IP: "${MYSQL_HOST_IP}"
     ports:
-      - 3050:3001
+      - 3050:3000
 
 #client setup
   client:
@@ -49,15 +49,15 @@ services:
       - /app/node_modules
       - ./client:/app
     ports:
-      - "80:3000"
+      - "80:5000"
 
-#adminer setup
-  adminer:
-      image: adminer:latest
-      restart: unless-stopped
-      ports:
-        - 8000:8080
-      depends_on:
-        - mysql_db
-      environment:
-        ADMINER_DEFAULT_SERVER: mysql_db
+# #adminer setup
+#   adminer:
+#       image: adminer:latest
+#       restart: unless-stopped
+#       ports:
+#         - 8000:8080
+#       depends_on:
+#         - mysql_db
+#       environment:
+#         ADMINER_DEFAULT_SERVER: mysql_db
