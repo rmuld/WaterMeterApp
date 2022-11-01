@@ -8,7 +8,6 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema WaterMeter
 -- -----------------------------------------------------
-
 CREATE SCHEMA IF NOT EXISTS `WaterMeter` ;
 USE `WaterMeter` ;
 
@@ -121,6 +120,25 @@ CREATE TABLE IF NOT EXISTS `WaterMeter`.`UsersRoles` (
   CONSTRAINT `urRoleID`
     FOREIGN KEY (`urRoleID`)
     REFERENCES `WaterMeter`.`Roles` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `WaterMeter`.`WaterUsage`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `WaterMeter`.`WaterUsage` (
+  `ID` INT NOT NULL,
+  `amount` INT NOT NULL,
+  `creationTime` DATETIME NOT NULL,
+  `waterMeterID` INT NOT NULL,
+  `consumptionTime` DATE NOT NULL,
+  PRIMARY KEY (`ID`),
+  INDEX `waterMeterID_idx` (`waterMeterID` ASC) VISIBLE,
+  CONSTRAINT `waterMeterID`
+    FOREIGN KEY (`waterMeterID`)
+    REFERENCES `WaterMeter`.`WaterMeters` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
