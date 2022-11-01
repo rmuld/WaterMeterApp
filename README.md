@@ -1,45 +1,30 @@
+# WaterMeter V1
 
 ## Steps to set upt the WaterMeter full-stack project
-### Server
-`npm install cors express mysql2`
 
-#### `npm start`
+Clone repository from https://github.com/rmuld/WaterMeterApp
 
-Runs the app in the development mode.\
-Open [http://localhost:3001](http://localhost:3001) to view it in your browser.
+## Before starting the application
+Create environment variables into .env file in project root
+    MYSQL_DATABASE=watermeter
+    MYSQL_USER=exampleuser
+    MYSQL_PASSWORD=example123
+    MYSQL_ROOT_PASSWORD=example123
+    MYSQL_HOST_IP=mysql_db
 
-### Client
-`npx create-react-app client --use-npm`
-`npm install axios bootstrap react-bootstrap`
-
-#### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
+For Server connection you need these variables:
+    DB_USER=exampleuser
+    DB_PASSWORD=example123
+    DATABASE=watermeter
+    HOST=localhost
+    JWT_SECRET=example123
+    SALTROUNDS=5
 
 ## Prerequsites
 Have Node.js and Docker installed
 
-
-# Docker
-
-## Create server image
-`docker build -f server.Dockerfile -t server .`
-
-## execute the server image
-`docker run -it -p 4002:3001 server`
-
-## Create docker-compose.yml 
-## Create root and setup.sql 
-When the mysql_db instance has been created, this script will be executed, and a table books_reviews will automatically create the defined fields.
-
+## Install dependencies
+`npm install`
 
 ## Run and test the fully containerized application instance on project root
 `docker-compose up --build`
-
-## you can access the Adminer 
-Use route http://localhost:8000/
-
-## To start interacting with the application
-open http://localhost:3050/ on a browser
