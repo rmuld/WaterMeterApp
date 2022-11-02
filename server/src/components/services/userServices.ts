@@ -39,7 +39,7 @@ const getAllUsers = async () => {
         const userWithoutPassword = userServices.getUserWithoutPassword(user);
         return userWithoutPassword;
     });
-    const u = await pool.query('select * from users limit 10')
+    const u = await pool.query('select * from Users limit 10')
     console.log('users: ', u)
     return usersWithoutPassword;
 }

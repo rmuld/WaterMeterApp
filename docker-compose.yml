@@ -9,7 +9,7 @@ services:
       - SYS_NICE
     volumes:
       - ./database/db_container_volume:/var/lib/mysql
-      - "./database/createDBUser.sql:/docker-entrypoint-initdb.d/createDBUser.sql"
+      #- "./database/createDBUser.sql:/docker-entrypoint-initdb.d/createDBUser.sql"
       - "./database/WaterMeterTablesCreationScript.sql:/docker-entrypoint-initdb.d/WaterMeterTablesCreationScript.sql"
       - "./database/createData.sql:/docker-entrypoint-initdb.d/createData.sql"
     ports:
