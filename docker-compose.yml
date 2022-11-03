@@ -35,7 +35,7 @@ services:
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
       MYSQL_USER: "${MYSQL_USER}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
-      MYSQL_HOST_IP: "${MYSQL_HOST_IP}"
+      MYSQL_HOST: "${MYSQL_HOST}"
     ports:
       - 3050:3000
 

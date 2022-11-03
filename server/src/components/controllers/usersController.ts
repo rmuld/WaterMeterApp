@@ -3,8 +3,8 @@ import { INewUser, IUser } from "../interfaces/usersInterfaces";
 import userServices from '../services/userServices';
 
 
- const getAllUsers = (req: Request, res: Response) => {
-    const usersWithoutPassword = userServices.getAllUsers();
+ const getAllUsers = async (req: Request, res: Response) => {
+    const usersWithoutPassword = await userServices.getAllUsers();
     res.status(200).json({
         success: true,
         message: 'List of users',

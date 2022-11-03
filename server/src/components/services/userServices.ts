@@ -35,14 +35,14 @@ const unknownUser = (): IUser => {
 };
 
 const getAllUsers = async () => {
-    const usersWithoutPassword = users.map(user => {
-        const userWithoutPassword = userServices.getUserWithoutPassword(user);
-        return userWithoutPassword;
-    });
-    const u = await pool.query('select * from Users limit 10')
+    // const usersWithoutPassword = users.map(user => {
+    //     const userWithoutPassword = userServices.getUserWithoutPassword(user);
+    //     return userWithoutPassword;
+    // });
+    const [u]  = await pool.query('select * from Users limit 10;')
     console.log('users: ', u)
-    return usersWithoutPassword;
-}
+    return u;
+};
     
 const createUser = async (newUser: INewUser): Promise<number> => {
     const id = users.length + 1;
