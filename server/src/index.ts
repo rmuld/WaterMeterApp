@@ -16,9 +16,9 @@ app.use(express.json());
 app.use(logger);
 
 //app.post(`${apiPath}/register`, authController.register);
-app.post(`${apiPath}/login`, authController.login);
+//app.post(`${apiPath}/login`, authController.login); //TODO: välja kommenteeritud, et frondis ilma autentimiseta andmed kätte saaks
 app.use(`${apiPath}/health`, generalRoutes);
-app.use(authMiddleware.isLoggedIn);
+//app.use(authMiddleware.isLoggedIn); //TODO: välja kommenteeritud, et frondis ilma autentimiseta andmed kätte saaks
 app.use(`${apiPath}/users`, usersRoutes);
 app.use(`${apiPath}/addresses`, addressesRoutes);
 app.use(`${apiPath}/water-meter`, waterMetersRoutes);

@@ -48,7 +48,7 @@ services:
       dockerfile: client.Dockerfile
       context: ./client
     volumes:
-      - /app/node_modules
-      - ./client:/app
+      - /public/node_modules
+      - ./client:/public
     ports:
       - "80:5000"

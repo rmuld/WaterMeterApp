@@ -7,14 +7,11 @@ const Home = () => {
         <h1>Avaleht</h1>
         <br />
         <ul>
-            {/* <li>
-            <Link to="/thesis">Login(thesis)</Link>
-            </li> */}
             <li>
-            <Link to="/new-address">Add address</Link>
+            <Link to="/waterusage">WaterUsage</Link>
             </li>
             <li>
-            <Link to="/signup">Signup</Link>
+            <Link to="/new-address">Add address</Link>
             </li>
             <li>
             <Link to="/new-watermeter">Add Watermeter</Link>

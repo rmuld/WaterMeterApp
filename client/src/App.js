@@ -4,6 +4,7 @@ import Home from './components/Home';
 import SignUp from './components/SignUp';
 import AddNewWaterMeter from './components/AddNewWaterMeter';
 import AddNewAddress from './components/AddNewAddress';
+import WaterUsage from './components/WaterUsage';
 import './App.css';
 
 
@@ -18,6 +19,7 @@ function App() {
         <Route path='/signup' element={ <SignUp />} />
         <Route path='/new-watermeter' element={ <AddNewWaterMeter />} />
         <Route path='/new-address' element={ <AddNewAddress />} />
+        <Route path='/waterusage' element={ <WaterUsage />} />
       </Routes>
     </Router>
   </>

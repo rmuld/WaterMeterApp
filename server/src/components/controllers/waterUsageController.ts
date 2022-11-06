@@ -8,7 +8,7 @@ const getAllWaterUsages = async(req: Request, res: Response, next: NextFunction)
 
         res.status(200).json({
             success: true,
-            message: 'List of watermeters',
+            message: 'List of water usages',
             waterusages,
         });
     } catch (error) {
