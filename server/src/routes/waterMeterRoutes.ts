@@ -8,7 +8,6 @@ waterMetersRoutes
     .get("/", waterMeterControllers.getAllWaterMeters)
     .get("/:id", waterMeterControllers.getWaterMeterById)
     .post("/:id", waterMetersMiddleware.checkCreateWaterMeterData, waterMeterControllers.createNewWaterMeter)
-    .patch("/:id", waterMeterControllers.updateWaterMeter)
     .delete("/:id", waterMeterControllers.deleteWaterMeterById);
 
 export default waterMetersRoutes;

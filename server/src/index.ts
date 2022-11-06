@@ -4,6 +4,7 @@ import generalRoutes from "./routes/generalRoutes";
 import usersRoutes from "./routes/usersRoutes";
 import addressesRoutes from "./routes/addressesRoutes";
 import waterMetersRoutes from "./routes/waterMeterRoutes";
+import waterUsageRoutes from "./routes/waterUsageRoutes";
 import authController from "./components/controllers/authContoller";
 import authMiddleware from "./middleware/authMiddleWare";
 import config from './apiConfig';
@@ -21,6 +22,7 @@ app.use(authMiddleware.isLoggedIn);
 app.use(`${apiPath}/users`, usersRoutes);
 app.use(`${apiPath}/addresses`, addressesRoutes);
 app.use(`${apiPath}/water-meter`, waterMetersRoutes);
+app.use(`${apiPath}/water-usage`, waterUsageRoutes);
 
 app.listen(port, () => {
     console.log(`App is running on port ${port}`);

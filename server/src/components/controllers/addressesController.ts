@@ -1,107 +1,84 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { IAddress } from '../interfaces/addressesInterfaces';
 import { addresses } from '../mockData/mockData';
 import addressServices from '../services/addressServices';
 
-const getAllAddresses = (req: Request, res: Response) => {  
-    const addresses = addressServices.getAllAddresses();
-    res.status(200).json({
-        success: true,
-        message: 'List of addresses',
-        addresses,
-    });
+const getAllAddresses = (req: Request, res: Response, next: NextFunction) => {
+    try {
+        let addresses;
+        const { id } = res.locals.address;
+        addresses = addressServices.getAllAddresses();
+
+        res.status(200).json({
+            success: true,
+            message: 'List of addresses',
+            addresses,
+        });
+    } catch (error) {
+        next(error);
+    }   
 }
 
-const getAddressById = (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
-    let address: IAddress | undefined = addressServices.findAddressById(id);
-    if (!address) {
-        return res.status(404).json({
-            success: false,
-            message: `Address not found`,
-        });
-    }
+const getAddressById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = parseInt(req.params.id, 10);
+        const address = await addressServices.findAddressById(id);
+        if (!address) throw new Error('Address not found');
 
-    return res.status(200).json({
-        success: true,
-        message: `Address`,
-        data: {
-            address: address
-        },
-    });
+        return res.status(200).json({
+            success: true,
+            message: `Address`,
+            data: {
+                address: address
+            },
+        });
+    } catch (error) {
+        next(error);
+    }   
 };
 
-const updateAddress = (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
-    const { postalCode, houseNumber, streetName, county, municipality, apartmentNumber } = req.body;
-    const address: IAddress | undefined = addressServices.findAddressById(id);
-    if (!address) {
-        return res.status(404).json({
-            success: false,
-            message: `Address not found`,
+const createNewAddress = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { postalCode, houseNumber, streetName, county, municipality, apartmentNumber, country } = req.body;
+        const newAddress = {
+            postalCode,
+            houseNumber,
+            streetName,
+            county,
+            municipality,
+            apartmentNumber,
+            country,
+        }
+        const id = await addressServices.createAddress(newAddress);
+        if (!id) throw new Error('Error, did manage to create address')
+        return res.status(201).json({
+            success: true,
+            message: `Address with id ${id} created`,
         });
-    }
-    if (!postalCode && !houseNumber && !streetName && !county && !municipality && !apartmentNumber) {
-        return res.status(400).json({
-            success: false,
-            message: `Nothing to change`,
-        });
-    }
-
-    if (postalCode) address.postalCode = postalCode;
-    if (houseNumber) address.houseNumber = houseNumber;
-    if (streetName) address.streetName = streetName;
-    if (county) address.county = county;
-    if (municipality) address.municipality = municipality;
-    if (apartmentNumber) address.apartmentNumber = apartmentNumber;
-
-    return res.status(200).json({
-        success: true,
-        message: `Address updated`,
-    });
+    } catch (error) {
+        next(error);
+    }   
 };
 
-const createNewAddress = (req: Request, res: Response) => {
-    const { postalCode, houseNumber, streetName, county, municipality, apartmentNumber } = req.body;
-    
-    const newAddress = {
-        postalCode,
-        houseNumber,
-        streetName,
-        county,
-        municipality,
-        apartmentNumber
-    }
-    const id = addressServices.createAddress(newAddress);
-
-    return res.status(201).json({
-        success: true,
-        message: `Address with id ${id} created`,
-    });
-};
-
-const deleteAddressById = (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
-    const index = addresses.findIndex(element => element.id === id);
-    if (index === -1) {
-        return res.status(404).json({
-            success: false,
-            message: `Address not found`,
+const deleteAddressById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = parseInt(req.params.id, 10);
+        const address = await addressServices.findAddressById(id);
+        if (!address) throw new Error('Error, did manage to delete address');
+        return res.status(200).json({
+            success: true,
+            message: `Address deleted`,
         });
-    }
-    addresses.splice(index, 1);
-    return res.status(200).json({
-        success: true,
-        message: `Address deleted`,
-    });
+    } catch (error) {
+        next(error);
+    }   
 };
 
 const addressesControllers = {
     getAllAddresses,
     getAddressById,
-    updateAddress,
     createNewAddress,
-    deleteAddressById
+    deleteAddressById,
 }
 
 

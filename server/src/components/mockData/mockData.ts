@@ -10,8 +10,7 @@ const users: IUser[] = [
         email: 'juhan@juurikas.ee',
         password: '$2b$10$MSSKAv0H4TCIgXRiJbYix.829Kt886rCVYgju9tGStiFndvh5WW62',
         personalNumber: 543654354,
-        phone: "54635454",
-        role: "Admin"
+        userRoleID: 1
     },
     {
         id: 2,
@@ -20,8 +19,7 @@ const users: IUser[] = [
         email: 'rita@rebane.ee',
         password: 'rita',
         personalNumber: 47102124354,
-        phone: "5015454",
-        role: "User"
+        userRoleID: 3
     },
 ];
 
@@ -33,6 +31,7 @@ const addresses: IAddress[] = [
         streetName: "Tuha tänav",
         municipality: "Tallinn",
         county: "Harju maakond",
+        country: "Eesti",
     },
     {
         id: 2,
@@ -41,7 +40,8 @@ const addresses: IAddress[] = [
         streetName: "Laulu tänav",
         county: "Harju maakond",
         apartmentNumber: 12,
-        municipality: "Saue vald"
+        municipality: "Saue vald",
+        country: "Eesti",
     },
 ];
 
@@ -51,7 +51,7 @@ const waterMeters: IWaterMeter[] = [
         serialNumber: "WM1",
         checkingDate: "12.10.2022",
         sealNumber: "SN1",
-        type: "main",
+        type: "peakraan",
         addressId: 1
     }
 ]

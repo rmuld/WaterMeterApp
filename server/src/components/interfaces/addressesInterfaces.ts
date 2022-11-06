@@ -1,14 +1,16 @@
-interface INewAddress  {
+import { RowDataPacket } from 'mysql2';
+
+interface IAddress  {
+    id?: number;
     postalCode: number;
     houseNumber: number;
     streetName: string;
     county: string;
     municipality: string;
     apartmentNumber?: number;
+    country: string;
 }
 
-interface IAddress extends INewAddress {
-    id: number;
-}
+interface IAddressSQL extends IAddress, RowDataPacket {}
 
-export { INewAddress, IAddress };
+export { IAddressSQL, IAddress };

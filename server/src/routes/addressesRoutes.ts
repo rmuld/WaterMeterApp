@@ -8,7 +8,6 @@ addressesRoutes
     .get("/", addressesControllers.getAllAddresses)
     .get("/:id", addressesControllers.getAddressById)
     .post("/:id", addressesMiddlewares.checkCreateAddressData, addressesControllers.createNewAddress)
-    .patch("/:id", addressesControllers.updateAddress)
     .delete("/:id", addressesControllers.deleteAddressById);
 
 export default addressesRoutes;

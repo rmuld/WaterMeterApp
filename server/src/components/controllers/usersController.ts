@@ -1,106 +1,112 @@
-import { Request, Response } from 'express';
-import { INewUser, IUser } from "../interfaces/usersInterfaces";
+import { NextFunction, Request, Response } from 'express';
+import { IUser } from "../interfaces/usersInterfaces";
 import userServices from '../services/userServices';
 
 
- const getAllUsers = async (req: Request, res: Response) => {
-    const usersWithoutPassword = await userServices.getAllUsers();
-    res.status(200).json({
-        success: true,
-        message: 'List of users',
-        users: usersWithoutPassword,
-    });
-}
-
-const getUserById = (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
-    let user: IUser | undefined = userServices.getUserById(id);
-    if (!user) {
-        return res.status(404).json({
-            success: false,
-            message: `User not found`,
+const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        let users;
+        if (res.locals.user.userRoleID === 1) {
+          users = await userServices.getAllUsers();
+        } else {
+          const { id } = res.locals.user;
+          users = userServices.getUserById(id);
+        }
+  
+        return res.status(200).json({
+          success: true,
+          message: 'List of users',
+          users,
         });
+      } catch (error) {
+        next(error);
+      }
     }
-    const userWithoutPassword = userServices.getUserWithoutPassword(user);
 
-    return res.status(200).json({
-        success: true,
-        message: `User`,
-        data: {
-            user: userWithoutPassword
-        },
-    });
+const getUserById =async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = parseInt(req.params.id, 10);
+        const user = await userServices.getUserById(id);
+        if (!user) throw new Error('User not found');
+        return res.status(200).json({
+          success: true,
+          message: 'User',
+          data: {
+            user,
+          },
+        });
+      } catch (error) {
+        next(error);
+      }
 };
 
-const updateUser = (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
-    const { firstName, lastName, email, password, personalNumber, phone, role } = req.body;
-    const user: IUser | undefined = userServices.getUserById(id);
-    if (!user) {
-        return res.status(404).json({
-            success: false,
-            message: `User not found`,
-        });
-    }
-    if (!firstName && !lastName && !email && !password && !personalNumber && !phone && !role) {
-        return res.status(400).json({
-            success: false,
-            message: `Nothing to change`,
-        });
-    }
-
-    const userToUpdate: IUser = {
+const updateUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = parseInt(req.params.id, 10);
+      const {
+        firstName, lastName, email, password,
+      } = req.body;
+  
+      const user = await userServices.getUserById(id);
+      if (!user) throw new Error('User not found');
+      if (!firstName && !lastName && !email && !password) throw new Error('Nothing to change');
+  
+      const userToUpdate: IUser = {
         id,
         firstName,
         lastName,
         email,
         password,
-        personalNumber,
-        phone,
-        role
-    }
-
-    userServices.updateUser(userToUpdate);
-
-    return res.status(200).json({
+      };
+  
+      const result = userServices.updateUser(userToUpdate);
+      if (!result) throw new Error('Error, did manage to update user');
+      return res.status(200).json({
         success: true,
-        message: `User ${firstName} ${lastName} updated`,
-    });
+        message: 'User updated',
+      });
+      } catch (error) {
+        next(error);
+      }
 };
 
-const createNewUser = async (req: Request, res: Response) => {
-    const { firstName, lastName, personalNumber, email, password, phone } = req.body;
-    const newUser: INewUser = {
-        firstName,
-        lastName,
-        email,
-        password,
-        personalNumber,
-        phone,
-        role: "User"
-    }
-    const id = await userServices.createUser(newUser);
-
-    return res.status(201).json({
-        success: true,
-        message: `User with id ${id} created`,
-    });
-};
-
-const deleteUserById = (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
-    const result = userServices.deleteUser(id);
-    if (!result) {
-        return res.status(404).json({
-            success: false,
-            message: `User not found`,
+const createNewUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const {
+          firstName, lastName, email, password, userRoleID
+        } = req.body;
+        const newUser: IUser = {
+          firstName,
+          lastName,
+          email,
+          password,
+          userRoleID: 3,
+        };
+        const id = await userServices.createUser(newUser);
+        if (!id) throw new Error('Error, did manage to create user');
+        return res.status(201).json({
+          success: true,
+          message: `User with id ${id} created`,
         });
-    }
-    
-    return res.status(200).json({
-        success: true,
-        message: `User deleted`,
-    });
+      } catch (error) {
+        next(error);
+      }
+};
+
+const deleteUserById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = parseInt(req.params.id, 10);
+        const user = await userServices.getUserById(id);
+        if (!user) throw new Error('User not found');
+        const result = await userServices.deleteUser(id);
+        if (!result) throw new Error('Error, did manage to delete user');
+        return res.status(200).json({
+          success: true,
+          message: 'User deleted',
+        });
+      } catch (error) {
+        next(error);
+      }
 };
 
 const usersControllers = {

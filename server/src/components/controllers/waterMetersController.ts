@@ -1,101 +1,81 @@
-import { Request, Response } from 'express';
-import { IWaterMeter } from '../interfaces/waterMetersInterfaces';
-import { waterMeters } from '../mockData/mockData';
+import { NextFunction, Request, Response } from 'express';
 import waterMeterServices from '../services/waterMeterServices';
 
-const getAllWaterMeters = (req: Request, res: Response) => {  
-    res.status(200).json({
-        success: true,
-        message: 'List of watermeters',
-        waterMeters,
-    });
+const getAllWaterMeters = async(req: Request, res: Response, next: NextFunction) => {
+    try {
+        let watermeters;
+        watermeters = await waterMeterServices.getAllWaterMeters();
+
+        res.status(200).json({
+            success: true,
+            message: 'List of watermeters',
+            watermeters,
+        });
+    } catch (error) {
+        next(error);
+    }
+   
 }
 
-const getWaterMeterById = (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
-    let waterMeter: IWaterMeter | undefined = waterMeterServices.findWaterMeterById(id);
-    if (!waterMeter) {
-        return res.status(404).json({
-            success: false,
-            message: `Watermeter not found`,
+const getWaterMeterById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = parseInt(req.params.id);
+        const watermeter = waterMeterServices.getWaterMeterById(id);
+        if (!watermeter) throw new Error('Watermeter not found');
+        
+        return res.status(200).json({
+            success: true,
+            message: `Watermeter`,
+            data: {
+                watermeter
+            },
         });
-    }
-
-    return res.status(200).json({
-        success: true,
-        message: `Watermeter`,
-        data: {
-            address: waterMeter
-        },
-    });
+    } catch (error) {
+        next(error);
+    }   
 };
 
-const updateWaterMeter = (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
-    const { serialNumber, checkingDate, sealNumber, type } = req.body;
-    const waterMeter: IWaterMeter | undefined = waterMeterServices.findWaterMeterById(id);
-    if (!waterMeter) {
-        return res.status(404).json({
-            success: false,
-            message: `Watermeter not found`,
-        });
-    }
-    if (!serialNumber && !checkingDate && !sealNumber && !type) {
-        return res.status(400).json({
-            success: false,
-            message: `Nothing to change`,
-        });
-    }
+const createNewWaterMeter = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { serialNumber, checkingDate, sealNumber, type, addressId } = req.body;
+        const newWaterMeter = {
+            serialNumber,
+            checkingDate,
+            sealNumber,
+            type,
+            addressId,
+        }
+        const id = waterMeterServices.createWaterMeter(newWaterMeter);
+        if (!id) throw new Error('Error, did manage to create watermeter');
 
-    if (serialNumber) waterMeter.serialNumber = serialNumber;
-    if (checkingDate) waterMeter.checkingDate = checkingDate;
-    if (sealNumber) waterMeter.sealNumber = sealNumber;
-    if (type) waterMeter.type = type;
-
-    return res.status(200).json({
-        success: true,
-        message: `Watermeter updated`,
-    });
+        return res.status(201).json({
+            success: true,
+            message: `Watermeter with id ${id} created`,
+        });
+    } catch (error) {
+        next(error);
+    }   
 };
 
-const createNewWaterMeter = (req: Request, res: Response) => {
-    const {  serialNumber, checkingDate, sealNumber, type, addressId } = req.body;
-    
-    const newWaterMeter = {
-        serialNumber,
-        checkingDate,
-        sealNumber,
-        type,
-        addressId
-    }
-    const id = waterMeterServices.createWaterMeterService(newWaterMeter);
-
-    return res.status(201).json({
-        success: true,
-        message: `Watermeter with id ${id} created`,
-    });
-};
-
-const deleteWaterMeterById = (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
-    const index = waterMeters.findIndex(element => element.id === id);
-    if (index === -1) {
-        return res.status(404).json({
-            success: false,
-            message: `Watermeter not found`,
+const deleteWaterMeterById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = parseInt(req.params.id);
+        const watermeter = await waterMeterServices.getWaterMeterById(id);
+        if (!watermeter) throw new Error('Watermeter not found');
+        const result = await waterMeterServices.deleteWaterMeter(id);
+        if (!result) throw new Error('Error, did manage to delete watermeter');
+        return res.status(200).json({
+            success: true,
+            message: `Watermeter deleted`,
         });
+    } catch (error) {
+        next(error);
     }
-    waterMeters.splice(index, 1);
-    return res.status(200).json({
-        success: true,
-        message: `Watermeter deleted`,
-    });
 };
 
 const waterMetersControllers = {
     getAllWaterMeters,
     getWaterMeterById,
-    updateWaterMeter,
     createNewWaterMeter,
     deleteWaterMeterById
 }

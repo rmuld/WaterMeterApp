@@ -3,11 +3,16 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { IUser } from '../interfaces/usersInterfaces';
 
-const saltRounds = process.env.SALTROUNDS || 10;
+let saltRounds = process.env.SALTROUNDS || 10;
 const jwtSecret = process.env.JWT_SECRET || "youwillneverknow"; //TODO
 
 
 const hash = async (password:string): Promise<string> => {
+    if (process.env.SALT_ROUNDS) {
+        saltRounds = parseInt(process.env.SALT_ROUNDS)
+    } else {
+    throw new Error("saltRounds environment variable is not set")
+    }
     const hash = await bcrypt.hash(password, saltRounds);
     console.log("hash: ", hash)
     return hash;
@@ -21,7 +26,6 @@ const sign = async (user:IUser): Promise<string> => {
     const payload = {
         id: user.id,
         email: user.email,
-        role: user.role,
     }
     const token = await jwt.sign(payload, jwtSecret, { expiresIn: '4h' });
     console.log("token: ", token)

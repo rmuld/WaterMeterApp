@@ -1,4 +1,7 @@
-interface INewWaterMeter {
+import { RowDataPacket } from 'mysql2';
+
+interface IWaterMeter {
+    id?: number;
     serialNumber: string;
     checkingDate: string;
     sealNumber: string;
@@ -6,9 +9,6 @@ interface INewWaterMeter {
     addressId: number;
 }
 
-interface IWaterMeter extends INewWaterMeter {
-    id: number;
-}
+interface IWaterMeterSQL extends IWaterMeter, RowDataPacket {}
 
-
-export { IWaterMeter, INewWaterMeter };
+export { IWaterMeter, IWaterMeterSQL };

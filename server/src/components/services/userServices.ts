@@ -1,92 +1,79 @@
+import { FieldPacket, ResultSetHeader } from 'mysql2';
 import pool from '../../database';
-import { INewUser, IUser, IUserWithoutPassword } from "../interfaces/usersInterfaces";
-import { users } from '../mockData/mockData';
-import hashService from "./hashService";
+import {IUser, IUserSQL } from "../interfaces/usersInterfaces";
+import authServices from './authServices';
 
-const getUserById = (id: number): IUser | undefined => {
-    let user: IUser | undefined = users.find(e => e.id === id);
-    return user;
+const getUserById = async (id: number) => {
+    const [user]: [IUserSQL[], FieldPacket[]] = await pool.query(`SELECT id, firstName, lastName, personalNumber, email, creationTime, userRoleID, useraddressID FROM Users WHERE id=?;`, [id]);
+    return user[0];
 };
 
-
-const getUserWithoutPassword = (user: IUser): IUserWithoutPassword => {
-    return {
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        personalNumber: user.personalNumber,
-        phone: user.phone,
-        role: user.role
-    };
-};
-
-const unknownUser = (): IUser => {
-    return {
-            id: 0,
-            firstName: 'Jane',
-            lastName: 'Doe',
-            email: 'jane@doe.com',
-            password: 'jane',
-            personalNumber: 4568008009,
-            phone: "55676869",
-            role: "User"
-        };
+const getUserByEmail = async (email: string) => {
+    const [user]: [IUserSQL[], FieldPacket[]] = await pool.query(`SELECT id, email, password, role FROM users WHERE email=? AND deletedDate IS NULL;`, [email]);
+    return user[0];
 };
 
 const getAllUsers = async () => {
-    // const usersWithoutPassword = users.map(user => {
-    //     const userWithoutPassword = userServices.getUserWithoutPassword(user);
-    //     return userWithoutPassword;
-    // });
-    const [u]  = await pool.query('select * from Users limit 10;')
-    console.log('users: ', u)
+    const [u] = await pool.query('select * from Users');
     return u;
 };
     
-const createUser = async (newUser: INewUser): Promise<number> => {
-    const id = users.length + 1;
-    const hashedPassword = await hashService.hash(newUser.password)
-    console.log(hashedPassword)
+const createUser = async (user: IUser): Promise<number | boolean> => {
+    const hashedPassword = await authServices.hash(user.password)
+    const newUser = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        password: hashedPassword,
+        userRoleID: 3,
+        userAddressID: null
+    }
+
+    const [result]: [ResultSetHeader, FieldPacket[]] = await pool.query(`INSERT INTO Users SET ?;`, [newUser]);
+    //return false;    
+    return result.insertId;
+}
+
+
+const updateUser = async (userToUpdate: IUser): Promise<Boolean> => {
+    const { id, firstName, lastName, personalNumber, email, password } = userToUpdate;
+    const user = await userServices.getUserById(id!);
+    let hashedPassword = null;
+    if (password) { hashedPassword = await authServices.hash(password) }
     
-    users.push({id, ...newUser, password: hashedPassword});
-    return id;
-}
+    const update = {
+        firstName: firstName || user.firstName,
+        lastName: lastName || user.lastName,
+        email: email || user.email,
+        password: hashedPassword || user.password,
+    }
 
-const getUserByEmail = async(email: string): Promise<IUser | undefined> => {
-    const user = users.find(e => e.email === email);
-    return user;
-}
-
-const updateUser = (userToUpdate: IUser): Boolean => {
-    const { id, firstName, lastName, personalNumber, email, password, phone, role } = userToUpdate;
-    const user = userServices.getUserById(id);
-    if (user && firstName) user.firstName = firstName;
-    if (user && lastName) user.lastName = lastName;
-    if (user && personalNumber) user.personalNumber = personalNumber;
-    if (user && email) user.email = email;
-    if (user && password) user.password = password;
-    if (user && phone) user.phone = phone;
-    if (user && role) user.role = role;
+    const [result]: [ResultSetHeader, FieldPacket[]] = await pool.query(`UPDATE users SET ? WHERE id=?;`, [update, id]);
+    if (result.affectedRows < 1) {
+        return false;
+    }
     return true;
 }
 
-const deleteUser = (id: number): Boolean => {
-    const index = users.findIndex(e => e.id === id);
-    if (index === -1) return false;
-    users.splice(index, 1);
+const deleteUser = async (id: number): Promise<Boolean> => {
+    const [result]: [ResultSetHeader, FieldPacket[]] = await pool.query(`UPDATE Users SET deletedDate=? WHERE id=?;`, [new Date(), id]);
+    if (result.affectedRows < 1) {
+        return false;
+    }
     return true;
 }
+
+//TODO
+//updateUserRole
+//updateUserAddress
 
 const userServices = {
     getAllUsers,
-    getUserWithoutPassword,
     getUserById,
     getUserByEmail, 
-    unknownUser,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,    
 }
 
 export default userServices;

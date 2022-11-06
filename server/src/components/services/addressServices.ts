@@ -1,43 +1,40 @@
-import { INewAddress, IAddress } from '../interfaces/addressesInterfaces';
-import { IWaterMeter } from '../interfaces/waterMetersInterfaces';
-import { addresses, waterMeters } from '../mockData/mockData';
-import waterMeterServices from './waterMeterServices';
+import { FieldPacket, ResultSetHeader } from 'mysql2';
+import pool from '../../database';
+import { IAddressSQL, IAddress } from '../interfaces/addressesInterfaces';
 
 
-const getAllAddresses = () => {
-    return addresses
+const getAllAddresses = async () => {
+    const [a] = await pool.query('select * from Addresses');
+    return a;
 }
 
-const findAddressById = (id: number): IAddress | undefined => {
-    let address: IAddress | undefined = addresses.find(element => element.id === id);
-    return address;
+const findAddressById = async (id: number) => {
+    const [address]: [IAddressSQL[], FieldPacket[]] = await pool.query(`SELECT postalCode, houseNumber, apartmentNumber, streetName, municipality, county, country FROM Addresses WHERE id=?;`, [id]);
+    return address[0];
 };
 
 
     
-const createAddress = (address: INewAddress):number => {
-    const id = addresses.length + 1;
+const createAddress = async (address: IAddress):Promise<number | boolean> => {
     const newAddress: IAddress = {
-        id,
         postalCode: address.postalCode,
         houseNumber: address.houseNumber,
-        streetName: address.streetName,
-        county: address.county,
-        municipality: address.municipality,
         apartmentNumber: address.apartmentNumber,
+        streetName: address.streetName,
+        municipality: address.municipality,
+        county: address.county,
+        country: address.country,
     };
-    addresses.push(newAddress);
-    return id;
+    
+    const [result]: [ResultSetHeader, FieldPacket[]] = await pool.query(`INSERT INTO Addresses SET ?`, [newAddress]);
+    //return false;
+    return result.insertId;
 }
 
-// const getAddressWithWatermeters = (address: IAddress)  => {
-//     const addressWaterMeters = addressWaterMetesServices.getAddressWaterMetersById(address.);
-// }
 const addressServices = {
     getAllAddresses,
-    //getAddressWithWatermeters,
     findAddressById,
-    createAddress
+    createAddress,
 }
 
 export default addressServices;
