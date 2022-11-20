@@ -1,5 +1,4 @@
 FROM node:alpine
-RUN npx create-react-app public
 WORKDIR /public
 COPY package.json ./
 COPY package-lock.json ./

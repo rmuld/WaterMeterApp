@@ -5,9 +5,9 @@ import userServices from '../services/userServices';
 
 const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        let users;
-        if (res.locals.user.userRoleID === 1) {
-          users = await userServices.getAllUsers();
+      let users;
+      if (res.locals.user.id === 1) {
+        users = await userServices.getAllUsers();
         } else {
           const { id } = res.locals.user;
           users = userServices.getUserById(id);
@@ -25,8 +25,8 @@ const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
 
 const getUserById =async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const id = parseInt(req.params.id, 10);
-        const user = await userServices.getUserById(id);
+      const id = parseInt(req.params.id);
+      const user = await userServices.getUserById(id);
         if (!user) throw new Error('User not found');
         return res.status(200).json({
           success: true,

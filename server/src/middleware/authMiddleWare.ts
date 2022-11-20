@@ -4,6 +4,7 @@ import authServices from "../components/services/authServices";
 
 const isLoggedIn = async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization?.split(' ')[1];
+    console.log('REQ: ', req.headers)
     if (!token) {
         return res.status(401).json({
             success: false,

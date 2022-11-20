@@ -8,13 +8,13 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema WaterMeter
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `WaterMeter` ;
-USE `WaterMeter` ;
+CREATE SCHEMA IF NOT EXISTS `watermeter` ;
+USE `watermeter` ;
 
 -- -----------------------------------------------------
 -- Table `WaterMeter`.`Roles`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `WaterMeter`.`Roles` (
+CREATE TABLE IF NOT EXISTS `watermeter`.`Roles` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `Name` ENUM('Admin', 'User', 'Client') NOT NULL,
   PRIMARY KEY (`ID`))
@@ -24,7 +24,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `WaterMeter`.`Addresses`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `WaterMeter`.`Addresses` (
+CREATE TABLE IF NOT EXISTS `watermeter`.`Addresses` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `postalCode` INT NOT NULL,
   `houseNumber` VARCHAR(45) NOT NULL,
@@ -40,7 +40,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `WaterMeter`.`Users`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `WaterMeter`.`Users` (
+CREATE TABLE IF NOT EXISTS `watermeter`.`Users` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `firstName` VARCHAR(45) NOT NULL,
   `lastName` VARCHAR(45) NOT NULL,
@@ -55,12 +55,12 @@ CREATE TABLE IF NOT EXISTS `WaterMeter`.`Users` (
   INDEX `addressID_idx` (`userAddressID` ASC) VISIBLE,
   CONSTRAINT `userRoleID`
     FOREIGN KEY (`userRoleID`)
-    REFERENCES `WaterMeter`.`Roles` (`ID`)
+    REFERENCES `watermeter`.`Roles` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `userAddressID`
     FOREIGN KEY (`userAddressID`)
-    REFERENCES `WaterMeter`.`Addresses` (`ID`)
+    REFERENCES `watermeter`.`Addresses` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -69,7 +69,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `WaterMeter`.`WaterMeterTypes`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `WaterMeter`.`WaterMeterTypes` (
+CREATE TABLE IF NOT EXISTS `watermeter`.`WaterMeterTypes` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `Name` ENUM('peakraan', 'kastmiskraan') NOT NULL,
   PRIMARY KEY (`ID`))
@@ -79,7 +79,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `WaterMeter`.`WaterMeters`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `WaterMeter`.`WaterMeters` (
+CREATE TABLE IF NOT EXISTS `watermeter`.`WaterMeters` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `number` INT NOT NULL,
   `checkingDate` DATETIME NULL,
@@ -92,12 +92,12 @@ CREATE TABLE IF NOT EXISTS `WaterMeter`.`WaterMeters` (
   INDEX `typeID_idx` (`wmTypeID` ASC) VISIBLE,
   CONSTRAINT `wmAddressID`
     FOREIGN KEY (`wmAddressID`)
-    REFERENCES `WaterMeter`.`Addresses` (`ID`)
+    REFERENCES `watermeter`.`Addresses` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `wmTypeID`
     FOREIGN KEY (`wmTypeID`)
-    REFERENCES `WaterMeter`.`WaterMeterTypes` (`ID`)
+    REFERENCES `watermeter`.`WaterMeterTypes` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -106,7 +106,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `WaterMeter`.`UsersRoles`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `WaterMeter`.`UsersRoles` (
+CREATE TABLE IF NOT EXISTS `watermeter`.`UsersRoles` (
   `urUserID` INT NOT NULL,
   `urRoleID` INT NOT NULL,
   INDEX `userID_idx` (`urUserID` ASC) VISIBLE,
@@ -114,12 +114,12 @@ CREATE TABLE IF NOT EXISTS `WaterMeter`.`UsersRoles` (
   PRIMARY KEY (`urRoleID`, `urUserID`),
   CONSTRAINT `urUserID`
     FOREIGN KEY (`urUserID`)
-    REFERENCES `WaterMeter`.`Users` (`ID`)
+    REFERENCES `watermeter`.`Users` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `urRoleID`
     FOREIGN KEY (`urRoleID`)
-    REFERENCES `WaterMeter`.`Roles` (`ID`)
+    REFERENCES `watermeter`.`Roles` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -128,7 +128,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `WaterMeter`.`WaterUsage`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `WaterMeter`.`WaterUsage` (
+CREATE TABLE IF NOT EXISTS `watermeter`.`WaterUsage` (
   `ID` INT NOT NULL,
   `amount` INT NOT NULL,
   `creationTime` DATETIME NOT NULL,
@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS `WaterMeter`.`WaterUsage` (
   INDEX `waterMeterID_idx` (`waterMeterID` ASC) VISIBLE,
   CONSTRAINT `waterMeterID`
     FOREIGN KEY (`waterMeterID`)
-    REFERENCES `WaterMeter`.`WaterMeters` (`ID`)
+    REFERENCES `watermeter`.`WaterMeters` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

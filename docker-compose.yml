@@ -4,16 +4,17 @@ services:
 #mysql setup
   mysql_db:
     image: mysql
+    container_name: riina-wm-db
     restart: always
     cap_add:
       - SYS_NICE
     volumes:
-      - ./database/db_container_volume:/var/lib/mysql
+      # - ./database/db_container_volume:/var/lib/mysql
       #- "./database/createDBUser.sql:/docker-entrypoint-initdb.d/createDBUser.sql"
       - "./database/WaterMeterTablesCreationScript.sql:/docker-entrypoint-initdb.d/WaterMeterTablesCreationScript.sql"
       - "./database/createData.sql:/docker-entrypoint-initdb.d/createData.sql"
     ports:
-      - "9906:3306"
+      - "3306:3306"
     environment:
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
       MYSQL_USER: "${MYSQL_USER}"
@@ -22,14 +23,15 @@ services:
 
 #server setup
   api:
+    container_name: riina-wm-api
     build:
       dockerfile: server.Dockerfile
       context: "./server"
     depends_on:
       - mysql_db
     volumes:
-      - /app/node_modules
       - ./server:/app
+      - /app/node_modules
       - .env:/app/.env
     environment:
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
@@ -37,18 +39,23 @@ services:
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       MYSQL_HOST: "${MYSQL_HOST}"
     ports:
-      - 3050:3000
+      - 3000:3000
 
 #client setup
   client:
-    stdin_open: true
-    environment:
-      - CHOKIDAR_USEPOLLING=true
+    container_name: riina-wm-front
     build:
       dockerfile: client.Dockerfile
       context: ./client
+    stdin_open: true
+    environment:
+    # https://stackoverflow.com/questions/61576659/how-to-hot-reload-in-reactjs-docker
+      WATCHPACK_POLLING: "true"
+      # - CHOKIDAR_USEPOLLING=true
     volumes:
       - /public/node_modules
       - ./client:/public
     ports:
-      - "80:5000"
+      - "5000:5000"
+    expose:
+      - "5000"

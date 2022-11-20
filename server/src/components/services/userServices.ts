@@ -9,12 +9,13 @@ const getUserById = async (id: number) => {
 };
 
 const getUserByEmail = async (email: string) => {
-    const [user]: [IUserSQL[], FieldPacket[]] = await pool.query(`SELECT id, email, password, role FROM users WHERE email=? AND deletedDate IS NULL;`, [email]);
+    const [user]: [IUserSQL[], FieldPacket[]] = await pool.query(`SELECT id, email, password, userRoleID FROM Users WHERE email=?;`, [email]);
     return user[0];
 };
 
 const getAllUsers = async () => {
-    const [u] = await pool.query('select * from Users');
+    const [u] = await pool.query('select * from Users;');
+    console.log("users: ", u)
     return u;
 };
     

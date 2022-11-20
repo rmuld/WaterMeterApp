@@ -10,7 +10,7 @@ const WaterUsage = () => {
     const [waterUsage, setWaterUsage] = useState();
 
     const getAllWaterUsages = () => {
-        fetch("http://localhost:3000/api/v1/water-usage")
+        fetch("http://localhost:3050/api/v1/water-usage")
             .then((res) => {
                 let response = res.json();
                 console.log('all water usage: ', res)
