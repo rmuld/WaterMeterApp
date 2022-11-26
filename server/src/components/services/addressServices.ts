@@ -4,7 +4,7 @@ import { IAddressSQL, IAddress } from '../interfaces/addressesInterfaces';
 
 
 const getAllAddresses = async () => {
-    const [a] = await pool.query('select * from Addresses');
+    const [a] = await pool.query('select * from Addresses;');
     return a;
 }
 

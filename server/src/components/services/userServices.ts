@@ -15,7 +15,6 @@ const getUserByEmail = async (email: string) => {
 
 const getAllUsers = async () => {
     const [u] = await pool.query('select * from Users;');
-    console.log("users: ", u)
     return u;
 };
     

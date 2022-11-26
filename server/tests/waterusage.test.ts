@@ -1,34 +1,30 @@
 import request from 'supertest';
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import app from '../src/app';
+import { adminUser, baseUrl } from './testData';
 
-const adminUser = {
-    email: 'juhan@juurikas.ee',
-    password: 'juurikas'
-}
 
-const wrongUser = {
-    email: 'wrong@wrong.ee',
-    password: 'wrongpassword'
-}
-
-const wrongPassword = {
-    email: 'juhan@juurikas.ee',
-    password: 'wrongpassword'
-}
-
-describe('Watermeters controller', () => {
+describe('Waterusages controller', () => {
     describe('GET /api/v1/water-usage', () => {
-    //kasutaja teeb päringu ilma tokenita
-    it('responds with  message and status code 200', async () => {
-      const login = await request(app).post('/api/v1/users').send(adminUser);
-      const token = login.body.token;
-      const response = await request(app).get('/api/v1/users');
+   
+      
+    it('responds with error message and statusCode 401', async () => {
+      const response = await request(baseUrl).get('/api/v1/water-usage');
       expect(response.body).to.be.a('object');
       expect(response.statusCode).to.equal(401);
       expect(response.body.success).to.be.false;
-      expect(response.body.message).to.equal('token not found');
+      expect(response.body.message).to.equal('Token not found');
+    });
+    it('responds with users array and statusCode 200', async () => {
+      const login = await request(baseUrl).post('api/v1/login').send(adminUser);
+      const token = login.body.token;
+      const response = await request(baseUrl).get('api/v1/water-usage').set('Authorization', `Bearer ${token}`);
+
+      expect(response.body).to.be.a('object');
+      expect(response.statusCode).to.equal(200);
+      expect(response.body.success).to.be.true;
+      expect(response.body.waterusages).to.be.a('array');
+      expect(response.body.waterusages.length).to.be.gt(1);
     });
         
   });

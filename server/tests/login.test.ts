@@ -1,25 +1,9 @@
 import request from 'supertest';
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
+import { adminUser, wrongUser, wrongPassword, baseUrl } from './testData';
 
-const adminUser = {
-    email: 'juhan@juurikas.ee',
-    password: 'juurikas'
-}
-
-const wrongUser = {
-    email: 'wrong@wrong.ee',
-    password: 'wrongpassword'
-}
-
-const wrongPassword = {
-    email: 'juhan@juurikas.ee',
-    password: 'wrongpassword'
-}
-
-const baseUrl = 'localhost:3000/'
-
-describe.only('Login controller', () => {
+describe('Login controller', () => {
     describe('POST /api/v1/login', () => {
         //õige email ja õige parool    
         it('responds with  message and status code 200', async () => {
@@ -30,7 +14,7 @@ describe.only('Login controller', () => {
         });
     });
     
-    describe.only('POST /api/v1/login', () => { 
+    describe('POST /api/v1/login', () => { 
         //ei saada midagi kaasa post päringuga
        it('responds with error message and status code 400', async () => {
            const response = await request(baseUrl).post('api/v1/login');

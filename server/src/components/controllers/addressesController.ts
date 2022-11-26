@@ -1,14 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
-import { IAddress } from '../interfaces/addressesInterfaces';
-import { addresses } from '../mockData/mockData';
 import addressServices from '../services/addressServices';
 
-const getAllAddresses = (req: Request, res: Response, next: NextFunction) => {
+const getAllAddresses = async (req: Request, res: Response, next: NextFunction) => {
     try {
         let addresses;
-        const { id } = res.locals.address;
-        addresses = addressServices.getAllAddresses();
-
+        addresses = await addressServices.getAllAddresses();
+        
         res.status(200).json({
             success: true,
             message: 'List of addresses',
