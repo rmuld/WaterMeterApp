@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `watermeter`.`Users` (
   `personalNumber` VARCHAR(45) NOT NULL,
   `email` VARCHAR(120) NOT NULL,
   `password` VARCHAR(120) NOT NULL,
-  `creationTime` DATETIME NOT NULL,
+  `creationTime` DATETIME NOT NULL DEFAULT current_timestamp,
   `userRoleID` INT NOT NULL,
   `userAddressID` INT NOT NULL,
   PRIMARY KEY (`ID`),
@@ -81,9 +81,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `watermeter`.`WaterMeters` (
   `ID` INT NOT NULL AUTO_INCREMENT,
-  `number` INT NOT NULL,
+  `serialNumber` INT NOT NULL,
   `checkingDate` DATETIME NULL,
-  `creationTime` DATETIME NOT NULL,
+  `creationTime` DATETIME NOT NULL DEFAULT current_timestamp,
   `sealNumber` BIGINT NOT NULL,
   `wmAddressID` INT NOT NULL,
   `wmTypeID` INT NOT NULL,
@@ -129,9 +129,9 @@ ENGINE = InnoDB;
 -- Table `WaterMeter`.`WaterUsage`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `watermeter`.`WaterUsage` (
-  `ID` INT NOT NULL,
+  `ID` INT NOT NULL AUTO_INCREMENT,
   `amount` INT NOT NULL,
-  `creationTime` DATETIME NOT NULL,
+  `creationTime` DATETIME NOT NULL DEFAULT current_timestamp,
   `waterMeterID` INT NOT NULL,
   `consumptionTime` DATE NOT NULL,
   PRIMARY KEY (`ID`),

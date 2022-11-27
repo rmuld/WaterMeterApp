@@ -26,15 +26,23 @@ const createAddress = async (address: IAddress):Promise<number | boolean> => {
         country: address.country,
     };
     
-    const [result]: [ResultSetHeader, FieldPacket[]] = await pool.query(`INSERT INTO Addresses SET ?`, [newAddress]);
-    //return false;
+    const [result]: [ResultSetHeader, FieldPacket[]] = await pool.query(`INSERT INTO Addresses SET ?;`, [newAddress]);
     return result.insertId;
+}
+
+const deleteAddress = async (id: number): Promise<Boolean> => {
+    const [result]: [ResultSetHeader, FieldPacket[]] = await pool.query(`DELETE FROM Addresses WHERE id=?;`, [id]);
+    if (result.affectedRows < 1) {
+        return false;
+    }
+    return true;
 }
 
 const addressServices = {
     getAllAddresses,
     findAddressById,
     createAddress,
+    deleteAddress,
 }
 
 export default addressServices;

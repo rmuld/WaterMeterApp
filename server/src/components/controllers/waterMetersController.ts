@@ -37,13 +37,13 @@ const getWaterMeterById = async (req: Request, res: Response, next: NextFunction
 
 const createNewWaterMeter = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { serialNumber, checkingDate, sealNumber, type, addressId } = req.body;
+        const { serialNumber, checkingDate, sealNumber, wmAddressID, wmTypeID  } = req.body;
         const newWaterMeter = {
             serialNumber,
             checkingDate,
             sealNumber,
-            type,
-            addressId,
+            wmAddressID,
+            wmTypeID,
         }
         const id = waterMeterServices.createWaterMeter(newWaterMeter);
         if (!id) throw new Error('Error, did manage to create watermeter');
@@ -57,27 +57,26 @@ const createNewWaterMeter = async (req: Request, res: Response, next: NextFuncti
     }   
 };
 
-const deleteWaterMeterById = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const id = parseInt(req.params.id);
-        const watermeter = await waterMeterServices.getWaterMeterById(id);
-        if (!watermeter) throw new Error('Watermeter not found');
-        const result = await waterMeterServices.deleteWaterMeter(id);
-        if (!result) throw new Error('Error, did manage to delete watermeter');
-        return res.status(200).json({
-            success: true,
-            message: `Watermeter deleted`,
-        });
-    } catch (error) {
-        next(error);
-    }
-};
+// const deleteWaterMeterById = async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const id = parseInt(req.params.id);
+//         const watermeter = await waterMeterServices.getWaterMeterById(id);
+//         if (!watermeter) throw new Error('Watermeter not found');
+//         const result = await waterMeterServices.deleteWaterMeter(id);
+//         if (!result) throw new Error('Error, did manage to delete watermeter');
+//         return res.status(200).json({
+//             success: true,
+//             message: `Watermeter deleted`,
+//         });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
 
 const waterMetersControllers = {
     getAllWaterMeters,
     getWaterMeterById,
     createNewWaterMeter,
-    deleteWaterMeterById
 }
 
 

@@ -8,11 +8,11 @@ const jwtSecret = process.env.JWT_SECRET || "youwillneverknow"; //TODO
 
 
 const hash = async (password:string): Promise<string> => {
-    if (process.env.SALT_ROUNDS) {
-        saltRounds = parseInt(process.env.SALT_ROUNDS)
-    } else {
-    throw new Error("saltRounds environment variable is not set")
-    }
+    // if (process.env.SALT_ROUNDS) {
+    //     saltRounds = parseInt(process.env.SALT_ROUNDS)
+    // } else {
+    // throw new Error("saltRounds environment variable is not set")
+    // }
     const hash = await bcrypt.hash(password, saltRounds);
     return hash;
 }

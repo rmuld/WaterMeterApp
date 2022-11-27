@@ -20,7 +20,7 @@ const getAllWaterUsages = async(req: Request, res: Response, next: NextFunction)
 const getWaterUsageByWaterMeterId = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = parseInt(req.params.id);
-        const waterusage = waterUsageServices.getWaterUsageByWaterMeterId(id);
+        const waterusage = await waterUsageServices.getWaterUsageByWaterMeterId(id);
         if (!waterusage) throw new Error('Watermeter usage not found');
         
         return res.status(200).json({

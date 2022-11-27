@@ -10,6 +10,6 @@ usersRoutes
     .get("/:id", usersControllers.getUserById)
     .post("/", usersMiddlewares.checkCreateUserData, usersControllers.createNewUser)
     .patch("/:id", usersControllers.updateUser)
-    .delete("/:id", usersControllers.deleteUserById);
+    //.delete("/:id", usersControllers.deleteUserById);
 
 export default usersRoutes;

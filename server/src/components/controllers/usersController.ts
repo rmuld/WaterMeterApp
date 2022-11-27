@@ -73,14 +73,14 @@ const updateUser = async (req: Request, res: Response, next: NextFunction) => {
 const createNewUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const {
-          firstName, lastName, email, password, userRoleID
+          firstName, lastName, personalNumber, email, password
         } = req.body;
         const newUser: IUser = {
           firstName,
           lastName,
+          personalNumber,
           email,
           password,
-          userRoleID: 3,
         };
         const id = await userServices.createUser(newUser);
         if (!id) throw new Error('Error, did manage to create user');
@@ -93,28 +93,34 @@ const createNewUser = async (req: Request, res: Response, next: NextFunction) =>
       }
 };
 
-const deleteUserById = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const id = parseInt(req.params.id, 10);
-        const user = await userServices.getUserById(id);
-        if (!user) throw new Error('User not found');
-        const result = await userServices.deleteUser(id);
-        if (!result) throw new Error('Error, did manage to delete user');
-        return res.status(200).json({
-          success: true,
-          message: 'User deleted',
-        });
-      } catch (error) {
-        next(error);
-      }
-};
+//TODO consider adding a row deleted=truse/false (default false) to Users table
+// const deleteUserById = async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const id = parseInt(req.params.id, 10);
+//         const user = await userServices.getUserById(id);
+//         if (!user) {
+//           return res.status(404).json({
+//             success: false,
+//             message: 'User not found',
+//           });
+//         };
+      
+//         const result = await userServices.deleteUser(id);
+//         if (!result) throw new Error('Error, did not manage to delete user');
+//         return res.status(200).json({
+//           success: true,
+//           message: 'User deleted',
+//         });
+//       } catch (error) {
+//         next(error);
+//       }
+// };
 
 const usersControllers = {
     getAllUsers,
     getUserById,
     updateUser,
     createNewUser,
-    deleteUserById,
 }
 
 

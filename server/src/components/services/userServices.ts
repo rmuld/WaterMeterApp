@@ -23,14 +23,14 @@ const createUser = async (user: IUser): Promise<number | boolean> => {
     const newUser = {
         firstName: user.firstName,
         lastName: user.lastName,
+        personalNumber: user.personalNumber,
         email: user.email,
         password: hashedPassword,
         userRoleID: 3,
-        userAddressID: null
+        userAddressID: 1000
     }
 
     const [result]: [ResultSetHeader, FieldPacket[]] = await pool.query(`INSERT INTO Users SET ?;`, [newUser]);
-    //return false;    
     return result.insertId;
 }
 
@@ -55,25 +55,25 @@ const updateUser = async (userToUpdate: IUser): Promise<Boolean> => {
     return true;
 }
 
-const deleteUser = async (id: number): Promise<Boolean> => {
-    const [result]: [ResultSetHeader, FieldPacket[]] = await pool.query(`UPDATE Users SET deletedDate=? WHERE id=?;`, [new Date(), id]);
-    if (result.affectedRows < 1) {
-        return false;
-    }
-    return true;
-}
+// const deleteUser = async (id: number): Promise<Boolean> => {
+//     const [result]: [ResultSetHeader, FieldPacket[]] = await pool.query(`DELETE FROM Users WHERE id=?;`, [id]);
+//     if (result.affectedRows < 1) {
+//         return false;
+//     }
+//     return true;
+// }
 
 //TODO
 //updateUserRole
 //updateUserAddress
+
 
 const userServices = {
     getAllUsers,
     getUserById,
     getUserByEmail, 
     createUser,
-    updateUser,
-    deleteUser,    
+    updateUser,    
 }
 
 export default userServices;

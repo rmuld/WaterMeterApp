@@ -2,8 +2,6 @@ import { Request, Response } from "express";
 import authServices from "../services/authServices";
 import userServices from "../services/userServices";
 
-
-
 const login =  async (req: Request, res: Response) => {
     const { email, password } = req.body;
     if (!email || !password) {

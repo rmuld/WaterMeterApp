@@ -36,14 +36,14 @@ const getAddressById = async (req: Request, res: Response, next: NextFunction) =
 
 const createNewAddress = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { postalCode, houseNumber, streetName, county, municipality, apartmentNumber, country } = req.body;
+        const { postalCode, houseNumber, apartmentNumber, streetName, municipality, county, country } = req.body;
         const newAddress = {
             postalCode,
             houseNumber,
-            streetName,
-            county,
-            municipality,
             apartmentNumber,
+            streetName,
+            municipality,
+            county,
             country,
         }
         const id = await addressServices.createAddress(newAddress);
@@ -57,25 +57,32 @@ const createNewAddress = async (req: Request, res: Response, next: NextFunction)
     }   
 };
 
-const deleteAddressById = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const id = parseInt(req.params.id, 10);
-        const address = await addressServices.findAddressById(id);
-        if (!address) throw new Error('Error, did manage to delete address');
-        return res.status(200).json({
-            success: true,
-            message: `Address deleted`,
-        });
-    } catch (error) {
-        next(error);
-    }   
-};
+//TODO consider adding a row deleted=truse/false (default false) to Addresses table
+// const deleteAddressById = async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const id = parseInt(req.params.id, 10);
+//         const address = await addressServices.findAddressById(id);
+//         if (!address) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: 'Address not found',
+//             })
+//         };
+//         const result = await addressServices.deleteAddress(id);
+//         if (!result) throw new Error('Error, did not manage to delete address');
+//         return res.status(200).json({
+//             success: true,
+//             message: `Address deleted`,
+//         });
+//     } catch (error) {
+//         next(error);
+//     }   
+// };
 
 const addressesControllers = {
     getAllAddresses,
     getAddressById,
     createNewAddress,
-    deleteAddressById,
 }
 
 

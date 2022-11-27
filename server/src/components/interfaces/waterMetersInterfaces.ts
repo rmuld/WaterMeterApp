@@ -5,8 +5,8 @@ interface IWaterMeter {
     serialNumber: string;
     checkingDate: string;
     sealNumber: string;
-    type: string;
-    addressId: number;
+    wmTypeID: string;
+    wmAddressID: number;
 }
 
 interface IWaterMeterSQL extends IWaterMeter, RowDataPacket {}

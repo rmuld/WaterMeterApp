@@ -13,7 +13,7 @@ const WaterUsage = () => {
         fetch("http://localhost:3050/api/v1/water-usage")
             .then((res) => {
                 let response = res.json();
-                console.log('all water usage: ', res)
+                
                 return response;
             })
             .then((data) => {

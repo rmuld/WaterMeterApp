@@ -7,7 +7,7 @@ const waterMetersRoutes = express.Router();
 waterMetersRoutes
     .get("/", waterMeterControllers.getAllWaterMeters)
     .get("/:id", waterMeterControllers.getWaterMeterById)
-    .post("/:id", waterMetersMiddleware.checkCreateWaterMeterData, waterMeterControllers.createNewWaterMeter)
-    .delete("/:id", waterMeterControllers.deleteWaterMeterById);
+    .post("/", waterMetersMiddleware.checkCreateWaterMeterData, waterMeterControllers.createNewWaterMeter)
+    //.delete("/:id", waterMeterControllers.deleteWaterMeterById);
 
 export default waterMetersRoutes;
