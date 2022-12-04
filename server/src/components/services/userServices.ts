@@ -4,7 +4,7 @@ import {IUser, IUserSQL } from "../interfaces/usersInterfaces";
 import authServices from './authServices';
 
 const getUserById = async (id: number) => {
-    const [user]: [IUserSQL[], FieldPacket[]] = await pool.query(`SELECT id, firstName, lastName, personalNumber, email, creationTime, userRoleID, useraddressID FROM Users WHERE id=?;`, [id]);
+    const [user]: [IUserSQL[], FieldPacket[]] = await pool.query(`SELECT id, firstName, lastName, personalNumber, email, creationTime, userRoleID, userAddressID FROM Users WHERE id=?;`, [id]);
     return user[0];
 };
 
@@ -36,7 +36,14 @@ const createUser = async (user: IUser): Promise<number | boolean> => {
 
 
 const updateUser = async (userToUpdate: IUser): Promise<Boolean> => {
-    const { id, firstName, lastName, personalNumber, email, password } = userToUpdate;
+    const { id,
+        firstName,
+        lastName,
+        email,
+        password,
+        userRoleID,
+        userAddressID } = userToUpdate;
+    
     const user = await userServices.getUserById(id!);
     let hashedPassword = null;
     if (password) { hashedPassword = await authServices.hash(password) }
@@ -46,9 +53,10 @@ const updateUser = async (userToUpdate: IUser): Promise<Boolean> => {
         lastName: lastName || user.lastName,
         email: email || user.email,
         password: hashedPassword || user.password,
+        userRoleID: userRoleID || user.userRoleID,
+        userAddressID: userAddressID || user.userAddressID,
     }
-
-    const [result]: [ResultSetHeader, FieldPacket[]] = await pool.query(`UPDATE users SET ? WHERE id=?;`, [update, id]);
+    const [result]: [ResultSetHeader, FieldPacket[]] = await pool.query(`UPDATE Users SET ? WHERE id=?;`, [update, id]);
     if (result.affectedRows < 1) {
         return false;
     }

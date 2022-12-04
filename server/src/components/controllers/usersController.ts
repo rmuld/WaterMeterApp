@@ -6,50 +6,53 @@ import userServices from '../services/userServices';
 const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
       let users;
+      
       if (res.locals.user.id === 1) {
         users = await userServices.getAllUsers();
-        } else {
-          const { id } = res.locals.user;
-          users = userServices.getUserById(id);
-        }
-  
-        return res.status(200).json({
-          success: true,
-          message: 'List of users',
-          users,
-        });
-      } catch (error) {
-        next(error);
+      } else {
+        const { id } = res.locals.user;
+        users = await userServices.getUserById(id);
       }
-    }
+  
+      return res.status(200).json({
+        success: true,
+        message: 'List of users',
+        users,
+      });
+  } catch (error) {
+    next(error);
+  }
+}
 
-const getUserById =async (req: Request, res: Response, next: NextFunction) => {
+const getUserById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = parseInt(req.params.id);
+      
       const user = await userServices.getUserById(id);
-        if (!user) throw new Error('User not found');
-        return res.status(200).json({
-          success: true,
-          message: 'User',
-          data: {
-            user,
-          },
-        });
-      } catch (error) {
-        next(error);
-      }
+      
+      if (!user) throw new Error('User not found');
+      return res.status(200).json({
+        success: true,
+        message: 'User',
+        data: {
+          user,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
 };
 
 const updateUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = parseInt(req.params.id, 10);
       const {
-        firstName, lastName, email, password,
+        firstName, lastName, email, password, userRoleID, userAddressID
       } = req.body;
   
       const user = await userServices.getUserById(id);
       if (!user) throw new Error('User not found');
-      if (!firstName && !lastName && !email && !password) throw new Error('Nothing to change');
+      if (!firstName && !lastName && !email && !password && !userRoleID && !userAddressID) throw new Error('Nothing to change');
   
       const userToUpdate: IUser = {
         id,
@@ -57,10 +60,13 @@ const updateUser = async (req: Request, res: Response, next: NextFunction) => {
         lastName,
         email,
         password,
+        userRoleID,
+        userAddressID
       };
   
       const result = userServices.updateUser(userToUpdate);
-      if (!result) throw new Error('Error, did manage to update user');
+      if (!result) throw new Error('Error, did not manage to update user');
+
       return res.status(200).json({
         success: true,
         message: 'User updated',

@@ -7,7 +7,8 @@ describe('Login controller', () => {
     describe('POST /api/v1/login', () => {
         //õige email ja õige parool    
         it('responds with  message and status code 200', async () => {
-        const response = await request(baseUrl).post('api/v1/login').send(adminUser);
+            const response = await request(baseUrl).post('api/v1/login').send(adminUser);
+            
         expect(response.statusCode).to.equal(200);
         expect(response.body.success).to.be.true;
         expect(response.body.message).to.equal('token');
@@ -18,6 +19,7 @@ describe('Login controller', () => {
         //ei saada midagi kaasa post päringuga
        it('responds with error message and status code 400', async () => {
            const response = await request(baseUrl).post('api/v1/login');
+
            expect(response.body).to.be.a('object');
            expect(response.statusCode).to.equal(400);
            expect(response.body.success).to.be.false;
@@ -26,6 +28,7 @@ describe('Login controller', () => {
        //email on vale
        it('responds with error message and status code 404', async () => {
            const response = await request(baseUrl).post('api/v1/login').send(wrongUser);
+
            expect(response.body).to.be.a('object');
            expect(response.statusCode).to.equal(404);
            expect(response.body.success).to.be.false;
@@ -35,6 +38,7 @@ describe('Login controller', () => {
         //õige email ja õige parool  
        it('responds with  message and status code 200', async () => {
            const response = await request(baseUrl).post('api/v1/login').send(adminUser);
+           
            expect(response.body).to.be.a('object');
            expect(response.statusCode).to.equal(200);
            expect(response.body.success).to.be.true;
@@ -42,12 +46,13 @@ describe('Login controller', () => {
        });
 
        //õige email ja vale parool
-       it('responds with  message and status code 200', async () => {
+       it('responds with  message and status code 401', async () => {
            const response = await request(baseUrl).post('api/v1/login').send(wrongPassword);
+
            expect(response.body).to.be.a('object');
-           expect(response.statusCode).to.equal(200);
-           expect(response.body.success).to.be.true;
-           expect(response.body.message).to.equal('token');
+           expect(response.statusCode).to.equal(401);
+           expect(response.body.success).to.be.false;
+           expect(response.body.message).to.equal('Wrong password');
        });
      });
 });

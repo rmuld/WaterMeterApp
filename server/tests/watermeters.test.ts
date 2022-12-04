@@ -89,6 +89,15 @@ describe('Watermeters controller', () => {
       expect(response.body.success).to.be.false;
       expect(response.body.message).to.equal('Some data is missing (serialNumber, checkingDate, sealNumber, type, address )');
     });
+    
+    it('responds with  status code 401', async () => {
+      const response = await request(baseUrl).post('api/v1/water-meter').send(newWaterMeter);
+
+      expect(response.body).to.be.a('object');
+      expect(response.statusCode).to.equal(401);
+      expect(response.body.success).to.be.false;
+      expect(response.body.message).to.equal('Token not found');
+    });
         
   });
 });
