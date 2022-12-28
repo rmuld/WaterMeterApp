@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -10,20 +11,20 @@ const WaterUsage = () => {
     const [waterUsage, setWaterUsage] = useState();
 
     const getAllWaterUsages = () => {
-        fetch("http://localhost:3050/api/v1/water-usage")
+        axios.get("http://localhost:3000/api/v1/water-usage")
             .then((res) => {
-                let response = res.json();
-                
+                let response = res.data.waterusages;
+                console.log("RES: ", response)
                 return response;
             })
-            .then((data) => {
-                setWaterUsage(data.waterUsage);
+            .then((response) => {
+                setWaterUsage(response);
             })
     };
 
-    useEffect(() => {
-        getAllWaterUsages();
-    }, []);
+    // useEffect(() => {
+    //     getAllWaterUsages();
+    // }, []);
 
     return (
         <WaterUsageContainer>

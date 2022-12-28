@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { initialAddressesList } from "../mockData";
+//import { initialAddressesList } from "../mockData";
 
 const AddNewAddress = () => {
-    const [addressList, setAddressList] = useState(initialAddressesList);
+    //const [addressList, setAddressList] = useState(initialAddressesList);
+    const [addressList, setAddressList] = useState([]);
     const [postalCode, setPostalCodet] = useState();
     const [apartmentNumber, setApartmentNumber] = useState();
     const [houseNumber, setHouseNumber] = useState();

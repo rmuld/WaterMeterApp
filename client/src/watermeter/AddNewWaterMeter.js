@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { initialWaterMeterList } from "../mockData";
+//import { initialWaterMeterList } from "../mockData";
 
 
 const AddNewWaterMeter = () => {
-    const [waterMeterList, setWaterMeterList] = useState(initialWaterMeterList);
+    //const [waterMeterList, setWaterMeterList] = useState(initialWaterMeterList);
+    const [waterMeterList, setWaterMeterList] = useState([]);
     const [serialNumber, setSerialNumber] = useState();
     const [checkingDate, setCheckingDate] = useState();
     const [sealNumber, setSealNumber] = useState();
