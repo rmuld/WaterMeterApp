@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {AuthContext} from '../../shared/context/AuthContext'
@@ -24,9 +24,6 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
- 
-    console.log('email: ', email)
-    console.log('passw: ', password)
 
     const handleSubmit = (e) => {
         e.preventDefault();
