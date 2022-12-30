@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import NavLinks from './NavLinks';
 
-const StyledHeader = styled(header)`
+const StyledHeader = styled('header')`
 width: 100%;
   height: 4rem;
   display: flex;
@@ -21,7 +22,10 @@ width: 100%;
 `;
 
 const MainHeader = props => {
-  return <header className="main-header">{props.children}</header>;
+  return (
+    <StyledHeader>
+      <NavLinks />
+    </StyledHeader>);
 };
 
 export default MainHeader;
