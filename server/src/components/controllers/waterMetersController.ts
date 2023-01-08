@@ -46,7 +46,7 @@ const createNewWaterMeter = async (req: Request, res: Response, next: NextFuncti
             wmTypeID,
         }
         const id = waterMeterServices.createWaterMeter(newWaterMeter);
-        if (!id) throw new Error('Error, did manage to create watermeter');
+        if (!id) throw new Error('Error, did not manage to create watermeter');
 
         return res.status(201).json({
             success: true,

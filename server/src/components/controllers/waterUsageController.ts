@@ -35,14 +35,14 @@ const getWaterUsageByWaterMeterId = async (req: Request, res: Response, next: Ne
 
 const createNewWaterUsage = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { amount, waterMeterID, consumptionTime } = req.body;
+        const { amount, consumptionTime, waterMeterID } = req.body;
         const newWaterUsage = {
             amount,
-            waterMeterID,
             consumptionTime,
+            waterMeterID,
         }
         const id = waterUsageServices.createWaterUsage(newWaterUsage);
-        if (!id) throw new Error('Error, did manage to create water usage');
+        if (!id) throw new Error('Error, did not manage to create water usage');
 
         return res.status(201).json({
             success: true,

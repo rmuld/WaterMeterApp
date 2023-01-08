@@ -10,7 +10,7 @@ width: 100%;
   position: fixed;
   top: 0;
   left: 0;
-  background: #ff0055;
+  background: #d2a5bd;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.26);
   padding: 0 1rem;
   z-index: 5;
@@ -21,7 +21,7 @@ width: 100%;
   }
 `;
 
-const MainHeader = props => {
+const MainHeader = () => {
   return (
     <StyledHeader>
       <NavLinks />

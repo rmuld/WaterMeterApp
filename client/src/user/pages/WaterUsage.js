@@ -5,7 +5,7 @@ import Table from 'react-bootstrap/Table';
 
 const WaterUsageContainer = styled("div")`
 width: auto;
-margin: 0 auto;
+margin: 80px auto;
 text-align: center;
 align
 & h1 {
@@ -20,7 +20,7 @@ margin: auto;
 
 const WaterUsage = () => {
     const [waterUsage, setWaterUsage] = useState([]);
-    const [years, setYears] = useState(["---", "2021", "2022"]);
+    const [years, setYears] = useState(["---", "2021", "2022", "2023"]);
     const [months, setMonths] = useState(["---", "jaanuar", "veebruar", "märts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember"]);
     const [yearSelected, setYearSelected] = useState("---");
     const [monthSelected, setMonthSelected] = useState("---");
@@ -67,8 +67,8 @@ const WaterUsage = () => {
     let filteredTable = waterUsage;
     if (yearSelected !== "---" || monthSelected !== "---") {
         filteredTable = (yearSelected !== "---")
-            ? waterUsage.filter(usage => usage.consumptionYear == yearSelected)
-            : waterUsage.filter(usage => usage.consumptionMonth == monthSelected);
+            ? waterUsage.filter(usage => usage.consumptionYear === yearSelected)
+            : waterUsage.filter(usage => usage.consumptionMonth === monthSelected);
     }
     
     return (

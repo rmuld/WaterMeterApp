@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `watermeter`.`WaterUsage` (
   `amount` INT NOT NULL,
   `creationTime` DATETIME NOT NULL DEFAULT current_timestamp,
   `waterMeterID` INT NOT NULL,
-  `consumptionTime` DATE NOT NULL,
+  `consumptionTime` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`ID`),
   INDEX `waterMeterID_idx` (`waterMeterID` ASC) VISIBLE,
   CONSTRAINT `waterMeterID`

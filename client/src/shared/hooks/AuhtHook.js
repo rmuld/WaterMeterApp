@@ -1,11 +1,11 @@
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 
-let logoutTimer;
+//let logoutTimer;
 
 export const useAuth = () => {
     const [token, setToken] = useState(null);
-    const [tokenExpDate, setTokenExpDate] = useState();
+    // const [tokenExpDate, setTokenExpDate] = useState();
     const [userId, setUserId] = useState(null);
 
     const login = useCallback((token) => { 
@@ -63,10 +63,10 @@ export const useAuth = () => {
     // }, [login]);
     
     useEffect(() => {
-        const storedData = JSON.parse(localStorage.getItem('user'));
+        const storedData = JSON.parse(localStorage.getItem('userData'));
         if (storedData && storedData.token) {
             login(storedData.userId, storedData.token)
-        }
+        } 
     }, [login]);
 
     return { token, login, logout, userId };

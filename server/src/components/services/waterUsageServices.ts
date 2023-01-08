@@ -16,8 +16,8 @@ const getWaterUsageByWaterMeterId = async(id: number) => {
 const createWaterUsage = async (waterUsage: IWaterUsage): Promise<number> => {
     const newWaterUsage = {
         amount: waterUsage.amount,
+        consumptionTime: waterUsage.consumptionTime,
         waterMeterID: waterUsage.waterMeterID,
-        consumptionTime: waterUsage.consumptionTime
     };
     
     const [result]: [ResultSetHeader, FieldPacket[]] = await pool.query('INSERT INTO WaterUsage SET ?;', [newWaterUsage]);

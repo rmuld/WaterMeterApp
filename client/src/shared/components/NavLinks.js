@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { AuthContext } from "../context/AuthContext";
 
@@ -28,15 +28,15 @@ list-style: none;
   & a:hover,
   a:active,
   a.active {
-    background: #f8df00;
-  border-color: #292929;
+    background: #BDD2A5;
+  border-color: #BDD2A5;
   color: #292929;
   }
 
   & button {
     cursor: pointer;
-  border: 1px solid #292929;
-  color: #292929;
+  border: 1px solid #AA5563;
+  color: #AA5563;
   background: transparent;
   padding: 0.5rem;
   font: inherit;
@@ -48,30 +48,39 @@ list-style: none;
 
   & button:hover,
   button:active {
-    background: #292929;
+    background: #AA5563;
   color: white;
   }
 `;
 
 const NavLinks = () => {
-    const auth = useContext(AuthContext);
+  const auth = useContext(AuthContext);
+  let navigate = useNavigate();
+  
+  const handleLogout = () => {
+    auth.logout();
+    navigate('/');
+  }
 
     return (
         <NavLinksContainer>
-            <li>
-                <NavLink to="/">Avaleht</NavLink>
-            </li>
-            {auth.isLoggedIn && (
-            <li>
-                <NavLink to="/waterusage">Vee tarbimine</NavLink>
+          {auth.isLoggedIn && (
+          <li>
+            <NavLink to="/">Avaleht</NavLink>
+          </li>)}
+          {auth.isLoggedIn && (
+          <li>
+            <NavLink to="/waterusage">Vee tarbimine</NavLink>
+          </li>)}
+          {auth.isLoggedIn && (
+          <li>
+            <NavLink to="/new-waterusage">Veetarbimise lisamine</NavLink>
           </li>)}
           {auth.isLoggedIn && (
             <li>
-              <button onClick={auth.logout}>LOGOUT</button>
+              <button onClick={handleLogout}>Logi välja</button>
             </li>
           )}
-            
-            
         </NavLinksContainer>
     )
 }

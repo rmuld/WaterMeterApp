@@ -11,6 +11,16 @@ align-items: center;
 margin-top: 250px;      
 `;
 
+const StyledButton = styled('button')`
+background-color: #7D9FBF;
+border: 1px solid #7D9FBF;
+`;
+
+const StyledLink = styled(Link)`
+color: #517DA5;
+margin-left: -42px;
+`;
+
 const Login = () => {
     const authContext = useContext(AuthContext);
     const [email, setEmail] = useState("");
@@ -56,11 +66,11 @@ return (
                 
                 <br />
                 <br/>
-                <button type="submit">Logi sisse</button>
+                <StyledButton type="submit">Logi sisse</StyledButton>
                 <br/>
             </form>
             <br/>
-        <Link to="/register">Registreeri kasutajaks</Link>
+        <StyledLink to="/register">Registreeri kasutajaks</StyledLink>
         </LoginContainer>
         
     </>
